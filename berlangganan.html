@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        body {
+            background-color: #1a1a1f;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        /* Logo Disney+ di pojok kiri atas */
+        .logo-atas-kiri {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+        }
+        .logo-atas-kiri img {
+            height: 36px;
+            width: auto;
+        }
+        .konten-utama {
+            width: 100%;
+            max-width: 540px;
+            margin-top: 40px;
+        }
+        .langkah {
+            font-size: 12px;
+            color: #b0b0c0;
+            margin-bottom: 6px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+        /* Metode Pembayaran */
+        .metode-bayar {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 24px;
+        }
+        .tab-bayar {
+            flex: 1;
+            padding: 12px 8px;
+            font-size: 15px;
+            color: #888;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .tab-bayar.aktif {
+            color: #fff;
+            border-bottom-color: #0099cc;
+        }
+        .tab-bayar .ikon-bayar {
+            font-size: 20px;
+        }
+        /* Formulir Kartu */
+        .form-grup {
+            margin-bottom: 18px;
+        }
+        .label-form {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+        .input-kartu-wrapper {
+            position: relative;
+        }
+        .input-kartu {
+            width: 100%;
+            padding: 14px 12px;
+            padding-right: 130px;
+            background-color: #23232b;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-kartu:focus {
+            border-color: #0099cc;
+        }
+        /* Logo Kartu di Dalam Kolom */
+        .logo-kartu {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .logo-kartu span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 20px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 10px;
+            color: #fff;
+        }
+        .logo-master {
+            background: linear-gradient(90deg, #eb001b 0%, #eb001b 45%, #f79e1b 55%, #f79e1b 100%);
+            border-radius: 10px;
+            width: 28px;
+        }
+        .logo-visa {
+            background: #1a237e;
+            width: 36px;
+            font-size: 11px;
+        }
+        .logo-amex {
+            background: #007bc1;
+            width: 36px;
+            font-size: 9px;
+        }
+        .baris-dua {
+            display: flex;
+            gap: 16px;
+        }
+        .baris-dua .form-grup {
+            flex: 1;
+        }
+        .input-kartu.kecil {
+            width: 100%;
+            padding-right: 12px;
+        }
+        .label-dengan-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-bantuan {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #777;
+            border-radius: 50%;
+            font-size: 12px;
+            color: #aaa;
+            cursor: help;
+        }
+        .kotak-simpan {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 18px 0;
+        }
+        .kotak-simpan input[type="checkbox"] {
+            margin-top: 2px;
+            width: 16px;
+            height: 16px;
+            accent-color: #0099cc;
+        }
+        .kotak-simpan label {
+            font-size: 13px;
+            color: #bbb;
+            line-height: 1.4;
+        }
+        .kotak-simpan a {
+            color: #0099cc;
+            text-decoration: none;
+        }
+        .kotak-simpan a:hover {
+            text-decoration: underline;
+        }
+        .teks-syarat {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.6;
+            margin: 20px 0 30px 0;
+        }
+        .tombol-setuju {
+            width: 100%;
+            padding: 14px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .tombol-setuju:hover {
+            background-color: #f0f0f0;
+        }
+        /* Footer */
+        .pembatas {
+            border-bottom: 1px solid #2a2a35;
+            width: 100%;
+            margin: 30px 0 20px 0;
+        }
+        .logo-bawah {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .logo-bawah img {
+            height: 32px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+        .tautan-bawah {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+        .tautan-bawah a {
+            color: #777;
+            text-decoration: none;
+        }
+        .tautan-bawah a:hover {
+            text-decoration: underline;
+        }
+        .hak-cipta {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo Disney+ di Pojok Kiri Atas -->
+    <div class="logo-atas-kiri">
+        <img src="img/disney+.png" alt="Disney+">
+    </div>
+
+    <div class="konten-utama">
+        <p class="langkah">STEP 2 OF 2</p>
+        <h1>Payment Method Verification</h1>
+
+        <!-- Metode Pembayaran -->
+        <div class="metode-bayar">
+            <div class="tab-bayar aktif" onclick="pilihKartu()">
+                <span class="ikon-bayar">💳</span> Credit card
+            </div>
+            <div class="tab-bayar" onclick="pilihPayPal()">
+                <span class="ikon-bayar">🅿️</span> PayPal
+            </div>
+            <div class="tab-bayar" onclick="pilihApplePay()">
+                <span class="ikon-bayar">🍎</span> Apple Pay
+            </div>
+        </div>
+
+        <!-- Formulir Kartu -->
+        <div class="form-grup">
+            <label class="label-form">CARD NUMBER</label>
+            <div class="input-kartu-wrapper">
+                <input type="text" class="input-kartu" placeholder="">
+                <div class="logo-kartu">
+                    <span class="logo-master"></span>
+                    <span class="logo-visa">VISA</span>
+                    <span class="logo-amex">AMEX</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="baris-dua">
+            <div class="form-grup">
+                <label class="label-form">EXPIRY DATE</label>
+                <input type="text" class="input-kartu kecil" placeholder="MM/YY">
+            </div>
+            <div class="form-grup">
+                <label class="label-form label-dengan-info">
+                    SECURITY CODE
+                    <span class="info-bantuan">i</span>
+                </label>
+                <input type="text" class="input-kartu kecil" placeholder="CVV">
+            </div>
+        </div>
+
+        <div class="form-grup">
+            <label class="label-form">NAME ON CARD</label>
+            <input type="text" class="input-kartu" placeholder="">
+        </div>
+
+        <div class="kotak-simpan">
+            <input type="checkbox" id="simpan-info">
+            <label for="simpan-info">Store my payment information for use across The Walt Disney Family of Companies. <a href="#">Learn more.</a></label>
+        </div>
+
+        <p class="teks-syarat">
+            By selecting 'Agree & Subscribe', you agree to start your subscription immediately and are enrolling in automatic payments of $25/month. Your first payment will be charged immediately, and we will charge the monthly or annual fee to your stored payment method on a recurring basis until you cancel.* You can cancel at any time, effective at the end of the billing period. There are no refunds or credits for partial months or years, unless required by law. You also agree that our Subscriber Agreement applies at disneyplus.com/legal/subscriber-agreement. **Savings compared to 12 months of the monthly subscription price of the same plan tier. *All plans may include ads served in live and linear programming, sports, trailers, promotional content, sponsorship and alike, and ad-supported plans contain ads in movies and series.
+        </p>
+
+        <!-- Tombol Verification → Buka halaman Disney+ Australia di tab baru -->
+        <button class="tombol-setuju" onclick="window.open('https://www.disneyplus.com/en-au', '_blank')">Verification</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="pembatas"></div>
+
+    <div class="logo-bawah">
+        <img src="img/disney+.png" alt="Disney+">
+    </div>
+
+    <div class="tautan-bawah">
+        <a href="#">Privacy Policy</a> |
+        <a href="#">Disney Terms of Use</a> |
+        <a href="#">Subscriber Agreement</a> |
+        <a href="#">Supplemental Privacy Policy for Indonesia</a> |
+        <a href="#">Help</a> |
+        <a href="#">Supported Devices</a> |
+        <a href="#">About Us</a> |
+        <a href="#">Interest-based Ads</a>
+    </div>
+
+    <div class="hak-cipta">
+        &copy; Disney. All Rights Reserved.
+    </div>
+
+    <!-- Fungsi Pilihan Pembayaran -->
+    <script>
+        function pilihKartu() {
+            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar')[0].classList.add('aktif');
+        }
+        function pilihPayPal() {
+            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar')[1].classList.add('aktif');
+        }
+        function pilihApplePay() {
+            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar')[2].classList.add('aktif');
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Disney+</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #062e3f 0%, #0d4f5c 35%, #0f5c68 50%, #0a3f52 75%, #072840 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo-atas {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .logo-atas img {
+            height: 42px;
+            width: auto;
+        }
+
+        .error-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 460px;
+            padding: 40px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 16px;
+        }
+
+        .pesan-error {
+            font-size: 15px;
+            color: #444444;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .tautan-beranda {
+            font-size: 15px;
+            color: #0063e5;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .tautan-beranda:hover {
+            text-decoration: underline;
+        }
+
+        .divider-line {
+            border-bottom: 1px solid #e5e5e5;
+            margin: 30px 0 16px 0;
+        }
+
+        .sponsor-logo {
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .sponsor-logo img {
+            height: 34px;
+            width: auto;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-atas">
+        <img src="img/disney+.png" alt="Disney+">
+    </div>
+
+    <div class="error-card">
+        <h1>Sorry, an unexpected error has occurred.</h1>
+
+        <p class="pesan-error">
+            Please try again later.
+        </p>
+
+        <a href="index.html" class="tautan-beranda">Go To Homepage</a>
+
+        <div class="divider-line"></div>
+
+        <div class="sponsor-logo">
+            <img src="img/sponsor.png" alt="Sponsor Logo">
+        </div>
+    </div>
+
+</body>
+</html>
